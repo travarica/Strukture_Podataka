@@ -49,7 +49,7 @@ int main(){
 
 
 
-    printf("\nIme, prezime, bodovi studenta i relativni bodovi studenta su:");
+    printf("\nIme, prezime, bodovi studenta i relativni bodovi studenta su: ");
     for (i = 0; i < brojstudenata; i++)
     {
         fscanf(fp,"%s %s %d", studentipokazivac[i].ime, studentipokazivac[i].prezime, &studentipokazivac[i].bodovi); //tocno pristupa odredenom redu
