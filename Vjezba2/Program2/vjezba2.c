@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -84,7 +83,8 @@ int obrisiElement(Position p, char* prezime) {
 }
 
 int dodajOsobu(Position head) {
-    char ime[50], prezime[50];
+    char ime[50];
+    char prezime[50];
     int god;
     char odabir;
 
