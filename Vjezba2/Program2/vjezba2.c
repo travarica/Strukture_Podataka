@@ -2,164 +2,165 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct _Person* Position;
+typedef struct Osoba {
 
-typedef struct _Person {
-    char ime[50];
-    char prezime[50];
-    int godina;
-    Position next;
-} Person;
+    char ime[99]; //99
+    char prezime[99];   //99
+    int godina;   //4
+    struct Osoba *sljedeci;   //sljedeci ce pokazivat na sljedeci element u listi, ako je prvi element a drugi b on pokazuje na b tako da ako je sljedeci NULL zna da je kraj liste
 
-Position stvoriOsobu(char* ime, char* prezime, int godina) {
-    Position newP = (Position)malloc(sizeof(Person));
-    if (!newP) {
-        return NULL;
-    }
+} lista;
 
-    strcpy(newP->ime, ime);
-    strcpy(newP->prezime, prezime);
-    newP->godina = godina;
-    newP->next = NULL;
-    return newP;
-}
+lista* UnosNaPocetak(lista *head){
+    lista *pocetak;
+    pocetak = (lista*)malloc(sizeof(lista));
 
-int ubaciIza(Position p, Position q) {
-    q->next = p->next;
-    p->next = q;
-    return 0;
-}
+    printf("Unesi ime,prezime i godinu: ");
+    scanf("%s %s %d", pocetak->ime, pocetak->prezime, &pocetak->godina);
 
-int unosNaPocetak(Position head, char* ime, char* prezime, int godina) {
-    Position newP = stvoriOsobu(ime, prezime, godina);
-    if (!newP) {
-        return -1;
-    }
-    return ubaciIza(head, newP);
-}
+    pocetak->sljedeci = head;
+    /*prvi unos head pokazuje na cvor a, a njegov sljedeci je poakziva na null, ond unesemo cvor b i ond head pokazuje na b ,
+     sljedeci na a i a pokazuje na NULL, svaki novi cvor ima svoj sljedeci
+    */
+    return pocetak;
 
-int unosNaKraj(Position head, const char* ime, const char* prezime, int godina) {
-   
-    Position p = head;
-    while (p->next != NULL) {
-        p = p->next;
-    }
+};
 
-    Position newP = stvoriOsobu(ime, prezime, godina);
+lista* UnosNaKraj(lista *head) {
+    lista *kraj;
+    kraj = (lista*)malloc(sizeof(lista));
     
-    return ubaciIza(p, newP);
+    printf("Unesi ime, prezime i godinu: ");
+    scanf("%s %s %d", kraj->ime, kraj->prezime, &kraj->godina);
+    kraj->sljedeci = NULL;
+    //onaj cvor koji ce bit zadnji moramo stavit da gleda na NULL jer definira kraj
+
+    if (head == NULL) {
+        return kraj;
+    }
+
+    lista *temp = head;
+    while (temp->sljedeci != NULL) {
+        temp = temp->sljedeci;
+    }
+    /*pomocni pokazivac koji ne mijenja glavni head, nego sluzi da vrati kroz sve cvorove dok ne dode do onog koji gleda na NULL
+    da smo pomicali head izgubili bi pocetak liste
+    */
+
+    temp->sljedeci = kraj;
+    //ovo znaci da taj temp koji je bia zadnji koji je gleda na null stavljamo vise ne gleda na null nego na element koji smo mi dodali, a on automatski gleda na null radi ovog     kraj->sljedeci = NULL;
+
+    return head;
 }
 
-void ispisiListu(Position head) {
-    Position q = head->next;
-    while (q) {
-        printf("Ime prezime i godina : %s %s %d\n", q->ime, q->prezime, q->godina);
-        q = q->next;
+lista* PronadiPrezime(lista *head, char pretrazi[99]){
+    lista *temp = head;
+    while (temp != NULL && strcmp(pretrazi, temp->prezime) != 0)
+    {
+        temp = temp->sljedeci;
     }
-}
-
-Position pronadjiPoPrezimenu(Position head, char* prezime) {
-    Position q = head->next;
-    while (q) {
-        if (strcmp(q->prezime, prezime) == 0) return q;
-        q = q->next;
-    }
-    return NULL;
-}
-
-int obrisiElement(Position p, char* prezime) {
-    Position prev = p;
-    Position curr = p->next;
-    while (curr && strcmp(curr->prezime, prezime) != 0) {
-        prev = curr;
-        curr = curr->next;
-    }
-    if (!curr) {
-        return 0; 
-    }
-    prev->next = curr->next;
-    free(curr);
-    return 1; 
-}
-
-int dodajOsobu(Position head) {
-    char ime[50];
-    char prezime[50];
-    int god;
-    char odabir;
-
-    printf("\nUpisi ime prezime i godine: ");
-    if (scanf("%s %s %d", ime, prezime, &god) != 3) {
-        return -1;
-    }
-
-    printf("Di zelis spremit ove podatke? (p - pocetak , k - kraj): ");
-    scanf(" %c", &odabir);
-
-    if (odabir == 'p' || odabir == 'P')
-        return unosNaPocetak(head, ime, prezime, god);
-    else
-        return unosNaKraj(head, ime, prezime, god);
-}
-
-int main(void) {
-    Person prazni = { .ime = { 0 }, .prezime = { 0 }, .godina = 0, .next = NULL };
-    Position head = &prazni;
-
-    int n = 0;
-    printf("Koliko unosa zelis: ");
-    if (scanf("%d", &n) != 1 || n <= 0) {
-        printf("Neispravan unos broja\n");
-        return -1;
-    }
-
-    for (int i = 0; i < n; i++) {
-        if (dodajOsobu(head) != 0) {
-            printf("Greska prilikom dodavanja\n");
-        }
-    }
-
-    ispisiListu(head);
-
-    char pronalazak[99];
-    printf("\nUpisi prezime za nac: ");
-    scanf("%s", pronalazak);
+    //vrtit ce se dok privremen pokazivac koji gleda na head nije prazan i dok se pronade to prezime, trenutno usporeduje sto smo upisali sa svakin cvorom dok ne nade
     
-    Position pronadjena = pronadjiPoPrezimenu(head, pronalazak);
-    if (pronadjena) 
-        printf("Pronadena osoba: %s %s %d\n", pronadjena->ime, pronadjena->prezime, pronadjena->godina);
-    else 
-        printf("Nema te osobe\n");
+    return temp;
+}
 
+lista* BrisanjeElementa(lista *head, char obrisi[99]){
+
+    if (strcmp(head->prezime, obrisi) == 0) {
+        //ako je element koji zelimo izbrisat na prvom mistu
+        lista *brisat = head;
+        head = head->sljedeci; 
+        free(brisat);
+        return head;
+    }
+
+
+    lista *temp = head;
+    while (temp->sljedeci != NULL && strcmp(temp->sljedeci->prezime, obrisi) != 0) {
+        temp = temp->sljedeci;
+        //temp zavrsava na onom prije nego onaj koi brisemo
+    }
+    //ova radnja ce se izvrsavat sve dok nije Null i dok ne nade prezime koje zelimo izbrisat
+
+    if (temp->sljedeci != NULL)
+    {
+         lista *brisat = temp->sljedeci;
+    temp->sljedeci = temp->sljedeci->sljedeci;
+    free(brisat);
+    //znaci taj element koji brisemo ce bit zamijenjen s elementom iza njega, tako da ce ostat veza
+    }
+    return head;
+}
+
+int main(){
+
+lista *head = NULL;
+
+int n = 0;
+printf("Unesi kolicinu osoba: ");
+scanf("%d", &n);
+ 
+for (int i = 0; i < n; i++){
+char izbor;
+
+printf("Zelite li osobu[%d] dodat na pocetak ili kraj (p - pocetak, k - kraj): ", i+1);
+ scanf(" %c", &izbor);
+
+{
+    if (izbor == 'p' || izbor == 'P')
+    {
+        head = UnosNaPocetak(head);
+    }
+    else if(izbor == 'k' || izbor == 'K'){
+        head = UnosNaKraj(head);
+    }
+    else{
+       printf("Krivi unos\n");
+    }
+
+}
+}
+
+char pretrazi[99];
+printf("Upisi prezime koje zelis nac: ");
+scanf("%s", pretrazi);
+
+lista *rezultat = PronadiPrezime(head, pretrazi);
+
+char obrisi[99];
+printf("Upisi prezime koje zelis obrisat: ");
+scanf("%s", obrisi);
+
+lista *temp = head;
+
+while (temp != NULL)
+{
+    printf("\nIme prezime i godina: %s %s %d", temp->ime, temp->prezime, temp->godina);
+    temp = temp->sljedeci;
     
-    while (1) {
-        printf("\nUpisi prezime osobe koju zelis izbrisati (ili 'e' za izlaz iz brisanja): ");
-        scanf("%s", pronalazak);
-        
-        if (strcmp(pronalazak, "e") == 0 || strcmp(pronalazak, "E") == 0) {
-            printf("Prekid\n");
-            break;
-        }
+}
 
-        int obrisano = obrisiElement(head, pronalazak);
-        if (obrisano == 1) {
-            printf("Obrisano\n");
-            break; 
-        } else {
-            printf("Nema to prezime\n");
-        }
-    }
 
-    printf("\nFinalna lista:\n");
-    ispisiListu(head);
+if (rezultat != NULL) {
+    printf("\nIme, prezime i godina pronadene osobe: %s %s %d", rezultat->ime, rezultat->prezime, rezultat->godina);
+} else {
+    printf("\nNema te osobe");
+}
 
-    Position curr = head->next;
-    while (curr) {
-        Position temp = curr;
-        curr = curr->next;
-        free(temp);
-    }
-    head->next = NULL;
+head = BrisanjeElementa(head,obrisi);
+
+temp = head; // vraca temp na pocetak da prolista kroz sve cvorove
+while (temp != NULL)
+{
+    printf("\n\nIme prezime i godina nakon brisanja: %s %s %d", temp->ime, temp->prezime, temp->godina);
+    temp = temp->sljedeci;
+    
+}
+
+
+
+
+
 
     return 0;
 }
