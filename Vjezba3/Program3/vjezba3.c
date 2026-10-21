@@ -112,6 +112,7 @@ if (temp->sljedeci != NULL)
 }
 
 
+//POCETAK VJEZBE 3
 lista* DodajIzaOdredenog(lista *head, char pretrazi[99]){
 
 lista *pronadeni = PronadiPrezime(head, pretrazi); //pronadeni sadrzi podatke cvora s prezimenom koje zelim
@@ -136,6 +137,48 @@ novi->sljedeci = privremen;
 return head;
 
 }
+
+
+
+lista *DodajIspredOdredenog(lista *head, char pretrazi[99]){
+
+lista *pronadeni = PronadiPrezime(head, pretrazi);
+lista *prolazkrozcvorove = head;
+
+
+if (pronadeni == NULL)
+{
+    printf("Prezime nije pronadeno");
+    return head;
+}
+
+lista *novi = (lista*)malloc(sizeof(lista));
+printf("Unesi ime, prezime i godinu za novi element: ");
+scanf("%s %s %d", novi->ime, novi->prezime, &novi->godina);
+
+//ako je taj element ispred kojeg dodajemo prvi
+if (pronadeni == head)
+{
+novi->sljedeci = head;
+return novi;
+}
+
+
+while (prolazkrozcvorove->sljedeci != pronadeni)
+{
+    prolazkrozcvorove = prolazkrozcvorove->sljedeci;
+} //znaci ovdi kad pronadene taj koji pokazuje na pronadeni stane i sejva prolazkrozcvorove na tu poziciju
+
+prolazkrozcvorove->sljedeci = novi;
+novi->sljedeci = pronadeni;
+
+
+
+
+
+}
+
+
 
 
 
@@ -209,9 +252,9 @@ printf("\nNema te osobe");
 }
 
 
-
-
 head = BrisanjeElementa(head,obrisi);
+
+
 
 
 char IzaOvogPrezimena[99];
@@ -220,6 +263,12 @@ scanf("%s", IzaOvogPrezimena);
 
 head = DodajIzaOdredenog(head, IzaOvogPrezimena);
 
+
+char IspredOvogPrezimena[99];
+printf("\nOdaberi ispred kojeg elementa zelis da se dodaju novi podaci: ");
+scanf("%s", IspredOvogPrezimena);
+
+head = DodajIspredOdredenog(head, IspredOvogPrezimena);
 
 
 temp = head; // vraca temp na pocetak da prolista kroz sve cvorove
