@@ -171,9 +171,50 @@ while (prolazkrozcvorove->sljedeci != pronadeni)
 prolazkrozcvorove->sljedeci = novi;
 novi->sljedeci = pronadeni;
 
+return head;
 
 }
 
+
+
+lista *SortirajPoPrezimenu(lista *head){
+
+    lista *prolazkrozcvorove = head;
+    lista *privremeni;
+    int alarm;
+
+    do{
+       alarm = 0;  //resetira svaki put alarm nakon svakog prolaza
+       prolazkrozcvorove = head;  //resetira svaki put poziciju cvora mna pocetak
+   
+    while(prolazkrozcvorove != NULL){ //samo 1 prolaz
+
+     if (prolazkrozcvorove->sljedeci != NULL && strcmp(prolazkrozcvorove->prezime , prolazkrozcvorove->sljedeci->prezime) > 0)
+       {   
+
+      privremeni = prolazkrozcvorove->sljedeci;
+     prolazkrozcvorove->sljedeci =  prolazkrozcvorove->sljedeci->sljedeci;
+      privremeni->sljedeci = head;
+      head = privremeni;
+      alarm = 1;
+
+       }
+
+        prolazkrozcvorove = prolazkrozcvorove->sljedeci;
+    }
+ } while(alarm == 1);
+    /* npr ide peric anic benic null,  privremeni = prolazkrozcvorove->sljedeci uvati anica i cuva ga , prolazkrozcvorove->sljedeci = prolazkrozcvorove->sljedeci->sljedeci peric se prusmjerava na benica, 
+    privremeni->sljedeci = head anic iz privremenog pokazuje na head koji je peric, head = privremeni i sad head postaje anic */
+
+    /*sistem alarma, kad sam imao samo 1 while proslo bi se samo 1 put kroz listu, sto znaci da nekad nebi sve sortiralo, ovako funkcionira dok god se desi promjena 
+    alarmu ce se dodjelit vrijednost jedan sto znaci da ce se opet vrtit, kad se ne desi promjena imat ce vrijednost 0 i znaci da je svako sortiranje obavljeno*/
+
+   
+   return head;
+    
+    
+    
+}
 
 
 
@@ -274,6 +315,19 @@ printf("\nIme prezime i godina finalne liste: %s %s %d", temp->ime, temp->prezim
 temp = temp->sljedeci;
 
 }
+
+
+head = SortirajPoPrezimenu(head); // vraca temp na pocetak da prolista kroz sve cvorove
+temp = head;
+while (temp != NULL)
+{
+printf("\nIme prezime i godina liste nakon sortiranja: %s %s %d", temp->ime, temp->prezime, temp->godina);
+temp = temp->sljedeci;
+
+}
+
+
+
 
 //oslobadanje memorije
 temp = head;
