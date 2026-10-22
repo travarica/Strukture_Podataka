@@ -13,7 +13,6 @@ struct Osoba *sljedeci; //sljedeci ce pokazivat na sljedeci element u listi, ako
 
 
 
-
 lista* UnosNaPocetak(lista *head){
 
 lista *pocetak;
@@ -29,7 +28,6 @@ sljedeci na a i a pokazuje na NULL, svaki novi cvor ima svoj sljedeci
 return pocetak;
 
 };
-
 
 
 
@@ -63,9 +61,6 @@ return head;
 
 
 
-
-
-
 lista* PronadiPrezime(lista *head, char pretrazi[99]){
 
 lista *temp = head;
@@ -78,9 +73,6 @@ while (temp != NULL && strcmp(pretrazi, temp->prezime) != 0)
 
 return temp;
 }
-
-
-
 
 
 
@@ -110,6 +102,13 @@ if (temp->sljedeci != NULL)
 }
     return head;
 }
+
+
+
+
+
+
+
 
 
 //POCETAK VJEZBE 3
@@ -171,9 +170,6 @@ while (prolazkrozcvorove->sljedeci != pronadeni)
 
 prolazkrozcvorove->sljedeci = novi;
 novi->sljedeci = pronadeni;
-
-
-
 
 
 }
