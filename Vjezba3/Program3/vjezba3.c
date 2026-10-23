@@ -222,6 +222,13 @@ lista *SortirajPoPrezimenu(lista *head){
 int main(){
 
 lista *head = NULL;
+FILE *fp = fopen("lista.txt", "w");
+if (fp == NULL)
+{
+    printf("error");
+    return -1;
+}
+
 
 
 
@@ -321,11 +328,33 @@ head = SortirajPoPrezimenu(head); // vraca temp na pocetak da prolista kroz sve 
 temp = head;
 while (temp != NULL)
 {
-printf("\nIme prezime i godina liste nakon sortiranja: %s %s %d", temp->ime, temp->prezime, temp->godina);
+
+fprintf(fp, "%s %s %d \n", temp->ime, temp->prezime, temp->godina);
+printf("\nIme prezime i godina liste nakon sortiranja: %s %s %d \n", temp->ime, temp->prezime, temp->godina);
 temp = temp->sljedeci;
 
 }
 
+fclose(fp);
+
+fp = fopen("lista.txt", "r");
+
+char citanjeime[99];
+char citanjeprezime[99];
+int citanjegodina;
+
+if (fp == NULL)
+{
+    printf("error");
+    return -1;
+}
+while (fscanf(fp, "%s %s %d", citanjeime, citanjeprezime, &citanjegodina) == 3 )
+{
+    printf("Pročitano iz fajla: %s %s %d\n", citanjeime, citanjeprezime, citanjegodina);
+    
+}
+
+fclose(fp);
 
 
 
