@@ -28,7 +28,7 @@ int push(int broj, _stog *head) {
 int pop(_stog *head) {
 
     if (head->sljedeci == NULL) {
-        printf("Stog je prazan!\n");
+        printf("prazan stog\n");
         return 0;
     }
 
@@ -76,14 +76,14 @@ int main() {
                     case '*': rez = a * b; break;
                     case '/':
                         if (b == 0) {
-                            printf("\nDijeljenje s nulom");
+                            printf("\ndijeljenje s nulon");
                             fclose(fp);
                             return -1;
                         }
                         rez = a / b;
                         break;
                     default:
-                        printf("\nNepoznat operator: %c", znak);
+                        printf("\nnepoznat operator: %c", znak);
                         fclose(fp);
                         return -1;
                 }
@@ -97,7 +97,7 @@ int main() {
         }
     }
 
-    printf("\nRezultat: %d\n", pop(&head));
+    printf("\nrezultat: %d\n", pop(&head));
 
     fclose(fp);
     return 0;
